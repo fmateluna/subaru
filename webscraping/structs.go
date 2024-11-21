@@ -8,29 +8,29 @@ import (
 )
 
 type loginResponse struct {
-	Status                   int    `json:"status"`
-	SessionJwtToken          string `json:"sessionJwtToken"`
+	Status                   int    `json:"status,omitempty"`
+	SessionJwtToken          string `json:"sessionJwtToken,omitempty"`
 	ProductCodesLicenseCodes []struct {
-		ProductCode string `json:"productCode"`
-		LicenseCode string `json:"licenseCode"`
-	} `json:"productCodesLicenseCodes"`
-	LocalSessionPingInterval int `json:"localSessionPingInterval"`
+		ProductCode string `json:"productCode,omitempty"`
+		LicenseCode string `json:"licenseCode,omitempty"`
+	} `json:"productCodesLicenseCodes,omitempty"`
+	LocalSessionPingInterval int `json:"localSessionPingInterval,omitempty"`
 }
 
 type SBSEPC5S struct {
 	jwt.RegisteredClaims
-	Sid string `json:"SID"`
-	Ts  string `json:"TS"`
-	Pk  string `json:"PK"`
-	Rd  string `json:"RD"`
+	Sid string `json:"SID,omitempty"`
+	Ts  string `json:"TS,omitempty"`
+	Pk  string `json:"PK,omitempty"`
+	Rd  string `json:"RD,omitempty"`
 }
 
 type SBSEPC5CS struct {
 	jwt.RegisteredClaims
-	Sid string `json:"SID,omitempty"`
-	Rd  string `json:"RD"`
-	Ts  string `json:"TS"`
-	Pk  string `json:"PK"`
+	Sid string `json:"SID,omitempty,omitempty"`
+	Rd  string `json:"RD,omitempty"`
+	Ts  string `json:"TS,omitempty"`
+	Pk  string `json:"PK,omitempty"`
 }
 
 var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
@@ -72,196 +72,234 @@ func (b *BotSubaru) RandomString(length int) string {
 // https://snaponepc.com/epc-services/equipment/search
 type SearchVIN struct {
 	VinSearchResults []struct {
-		DatasetName string `json:"datasetName"`
-		Vins        []VIN  `json:"vins"`
+		DatasetName string `json:"datasetName,omitempty"`
+		Vins        []VIN  `json:"vins,omitempty"`
 		Columns     []struct {
-			Field  string `json:"field"`
-			Header string `json:"header"`
-		} `json:"columns"`
-	} `json:"vinSearchResults"`
+			Field  string `json:"field,omitempty"`
+			Header string `json:"header,omitempty"`
+		} `json:"columns,omitempty"`
+	} `json:"vinSearchResults,omitempty"`
 }
 type VIN struct {
-	DatasetID              string        `json:"datasetId"`
-	SerializedPath         string        `json:"serializedPath"`
-	DatasetName            string        `json:"datasetName"`
-	ModelName              string        `json:"modelName"`
-	ModelQualifierName     string        `json:"modelQualifierName"`
-	EquipmentName          string        `json:"equipmentName"`
-	ID                     string        `json:"id"`
-	Vin                    string        `json:"vin"`
-	FormattedVin           string        `json:"formattedVin"`
-	BusinessRegion         int           `json:"businessRegion"`
-	BusinessRegionName     string        `json:"businessRegionName"`
-	ExternalBusinessRegion bool          `json:"externalBusinessRegion"`
-	VinNote                []interface{} `json:"vinNote"`
-	EquipmentRefID         string        `json:"equipmentRefId"`
-	EquipmentKey           string        `json:"equipmentKey"`
-	RangeLookup            bool          `json:"rangeLookup"`
-	VinResolution          string        `json:"vinResolution"`
-	EinID                  string        `json:"einId"`
-	ValidationString       string        `json:"validationString"`
-	HasUserVinNote         bool          `json:"hasUserVinNote"`
-	VinRecalled            bool          `json:"vinRecalled"`
-	Categories             []Category    `json:"categories"`
+	DatasetID              string        `json:"datasetId,omitempty"`
+	SerializedPath         string        `json:"serializedPath,omitempty"`
+	DatasetName            string        `json:"datasetName,omitempty"`
+	ModelName              string        `json:"modelName,omitempty"`
+	ModelQualifierName     string        `json:"modelQualifierName,omitempty"`
+	EquipmentName          string        `json:"equipmentName,omitempty"`
+	ID                     string        `json:"id,omitempty"`
+	Vin                    string        `json:"vin,omitempty"`
+	FormattedVin           string        `json:"formattedVin,omitempty"`
+	BusinessRegion         int           `json:"businessRegion,omitempty"`
+	BusinessRegionName     string        `json:"businessRegionName,omitempty"`
+	ExternalBusinessRegion bool          `json:"externalBusinessRegion,omitempty"`
+	VinNote                []interface{} `json:"vinNote,omitempty"`
+	EquipmentRefID         string        `json:"equipmentRefId,omitempty"`
+	EquipmentKey           string        `json:"equipmentKey,omitempty"`
+	RangeLookup            bool          `json:"rangeLookup,omitempty"`
+	VinResolution          string        `json:"vinResolution,omitempty"`
+	EinID                  string        `json:"einId,omitempty"`
+	ValidationString       string        `json:"validationString,omitempty"`
+	HasUserVinNote         bool          `json:"hasUserVinNote,omitempty"`
+	VinRecalled            bool          `json:"vinRecalled,omitempty"`
+	Categories             []Category    `json:"categories,omitempty"`
 }
 
 // https://snaponepc.com/epc-services/auth/account
 type Account struct {
 	UserDetails struct {
-		UserName     string `json:"userName"`
-		UserID       string `json:"userId"`
-		LastAccess   int64  `json:"lastAccess"`
-		FirstName    string `json:"firstName"`
-		LastName     string `json:"lastName"`
-		EmailAddress string `json:"emailAddress"`
-	} `json:"userDetails"`
+		UserName     string `json:"userName,omitempty"`
+		UserID       string `json:"userId,omitempty"`
+		LastAccess   int64  `json:"lastAccess,omitempty"`
+		FirstName    string `json:"firstName,omitempty"`
+		LastName     string `json:"lastName,omitempty"`
+		EmailAddress string `json:"emailAddress,omitempty"`
+	} `json:"userDetails,omitempty"`
 	DealerDetails struct {
-		Name         string `json:"name"`
-		Address1     string `json:"address1"`
-		Address2     string `json:"address2"`
-		Address3     string `json:"address3"`
-		City         string `json:"city"`
-		PostalCode   string `json:"postalCode"`
-		Country      string `json:"country"`
-		EmailAddress string `json:"emailAddress"`
-		Phone1       string `json:"phone1"`
-		Fax          string `json:"fax"`
-	} `json:"dealerDetails"`
+		Name         string `json:"name,omitempty"`
+		Address1     string `json:"address1,omitempty"`
+		Address2     string `json:"address2,omitempty"`
+		Address3     string `json:"address3,omitempty"`
+		City         string `json:"city,omitempty"`
+		PostalCode   string `json:"postalCode,omitempty"`
+		Country      string `json:"country,omitempty"`
+		EmailAddress string `json:"emailAddress,omitempty"`
+		Phone1       string `json:"phone1,omitempty"`
+		Fax          string `json:"fax,omitempty"`
+	} `json:"dealerDetails,omitempty"`
 }
 
 // https://snaponepc.com/epc-services/settings/user/
 type User struct {
 	ApplicationSettings struct {
-		Locale                          string  `json:"locale"`
-		DateFormat                      string  `json:"dateFormat"`
-		TimeFormat                      string  `json:"timeFormat"`
-		NavigationStyle                 string  `json:"navigationStyle"`
-		PartsPanelPosition              string  `json:"partsPanelPosition"`
-		EulaVersionAccepted             float64 `json:"eulaVersionAccepted"`
-		ConfirmBeforeExitingApplication bool    `json:"confirmBeforeExitingApplication"`
-		ConfirmBeforeClearingPicklist   bool    `json:"confirmBeforeClearingPicklist"`
-		ConfirmBeforeClosingJob         bool    `json:"confirmBeforeClosingJob"`
-		WarnMeOnUpdatesAvailable        bool    `json:"warnMeOnUpdatesAvailable"`
+		Locale                          string  `json:"locale,omitempty"`
+		DateFormat                      string  `json:"dateFormat,omitempty"`
+		TimeFormat                      string  `json:"timeFormat,omitempty"`
+		NavigationStyle                 string  `json:"navigationStyle,omitempty"`
+		PartsPanelPosition              string  `json:"partsPanelPosition,omitempty"`
+		EulaVersionAccepted             float64 `json:"eulaVersionAccepted,omitempty"`
+		ConfirmBeforeExitingApplication bool    `json:"confirmBeforeExitingApplication,omitempty"`
+		ConfirmBeforeClearingPicklist   bool    `json:"confirmBeforeClearingPicklist,omitempty"`
+		ConfirmBeforeClosingJob         bool    `json:"confirmBeforeClosingJob,omitempty"`
+		WarnMeOnUpdatesAvailable        bool    `json:"warnMeOnUpdatesAvailable,omitempty"`
 		SelectedPriceSource             struct {
-		} `json:"selectedPriceSource"`
-		AddPartsToBottomOfPicklist  bool   `json:"addPartsToBottomOfPicklist"`
-		ShowPicklistByDefault       bool   `json:"showPicklistByDefault"`
-		SelectedPicklistPriceSource string `json:"selectedPicklistPriceSource"`
-		AutoClearPicklist           bool   `json:"autoClearPicklist"`
-		HideQtyPrompt               bool   `json:"hideQtyPrompt"`
-		DebugEnabled                bool   `json:"debugEnabled"`
-		ShowAllIndicators           bool   `json:"showAllIndicators"`
-		StatisticsEnabled           bool   `json:"statisticsEnabled"`
-	} `json:"applicationSettings"`
+		} `json:"selectedPriceSource,omitempty"`
+		AddPartsToBottomOfPicklist  bool   `json:"addPartsToBottomOfPicklist,omitempty"`
+		ShowPicklistByDefault       bool   `json:"showPicklistByDefault,omitempty"`
+		SelectedPicklistPriceSource string `json:"selectedPicklistPriceSource,omitempty"`
+		AutoClearPicklist           bool   `json:"autoClearPicklist,omitempty"`
+		HideQtyPrompt               bool   `json:"hideQtyPrompt,omitempty"`
+		DebugEnabled                bool   `json:"debugEnabled,omitempty"`
+		ShowAllIndicators           bool   `json:"showAllIndicators,omitempty"`
+		StatisticsEnabled           bool   `json:"statisticsEnabled,omitempty"`
+	} `json:"applicationSettings,omitempty"`
 	DatasetSettings []struct {
-		DatasetID         string `json:"datasetId"`
-		DatasetName       string `json:"datasetName"`
-		Locale            string `json:"locale"`
-		BusinessRegionKey string `json:"businessRegionKey"`
-		BusinessRegion    int    `json:"businessRegion"`
-	} `json:"datasetSettings"`
+		DatasetID         string `json:"datasetId,omitempty"`
+		DatasetName       string `json:"datasetName,omitempty"`
+		Locale            string `json:"locale,omitempty"`
+		BusinessRegionKey string `json:"businessRegionKey,omitempty"`
+		BusinessRegion    int    `json:"businessRegion,omitempty"`
+	} `json:"datasetSettings,omitempty"`
 	EstimateSettings struct {
-		Contact         string `json:"contact"`
-		PriceMultiplier string `json:"priceMultiplier"`
-		Currency        string `json:"currency"`
-		LaborRate       string `json:"laborRate"`
-		TaxRate         string `json:"taxRate"`
-		HidePartNumbers bool   `json:"hidePartNumbers"`
-		TaxLabor        bool   `json:"taxLabor"`
-	} `json:"estimateSettings"`
+		Contact         string `json:"contact,omitempty"`
+		PriceMultiplier string `json:"priceMultiplier,omitempty"`
+		Currency        string `json:"currency,omitempty"`
+		LaborRate       string `json:"laborRate,omitempty"`
+		TaxRate         string `json:"taxRate,omitempty"`
+		HidePartNumbers bool   `json:"hidePartNumbers,omitempty"`
+		TaxLabor        bool   `json:"taxLabor,omitempty"`
+	} `json:"estimateSettings,omitempty"`
 }
 
 type ResponseFilters struct {
-	DatasetID       string `json:"datasetId"`
-	LevelColumnSort string `json:"levelColumnSort"`
+	DatasetID       string `json:"datasetId,omitempty"`
+	LevelColumnSort string `json:"levelColumnSort,omitempty"`
 	Children        struct {
-		ChildLevelTitle              string        `json:"childLevelTitle"`
-		ChildLevelType               string        `json:"childLevelType"`
-		ChildLevelSection            string        `json:"childLevelSection"`
-		ChildLevelIllustrated        bool          `json:"childLevelIllustrated"`
-		ChildLevelIllustrationWidth  int           `json:"childLevelIllustrationWidth"`
-		ChildLevelIllustrationHeight int           `json:"childLevelIllustrationHeight"`
-		ChildNodes                   []SubCategory `json:"childNodes"`
-	} `json:"children"`
-	Error bool `json:"error"`
+		ChildLevelTitle              string        `json:"childLevelTitle,omitempty"`
+		ChildLevelType               string        `json:"childLevelType,omitempty"`
+		ChildLevelSection            string        `json:"childLevelSection,omitempty"`
+		ChildLevelIllustrated        bool          `json:"childLevelIllustrated,omitempty"`
+		ChildLevelIllustrationWidth  int           `json:"childLevelIllustrationWidth,omitempty"`
+		ChildLevelIllustrationHeight int           `json:"childLevelIllustrationHeight,omitempty"`
+		ChildNodes                   []SubCategory `json:"childNodes,omitempty"`
+	} `json:"children,omitempty"`
+	Error bool `json:"error,omitempty"`
 }
 
 type SubCategory struct {
-	ID             string         `json:"id"`
-	Name           string         `json:"name"`
-	HasNotes       bool           `json:"hasNotes"`
-	LeafNode       bool           `json:"leafNode"`
-	ImageID        string         `json:"imageId"`
-	SerializedPath string         `json:"serializedPath"`
-	Filtered       bool           `json:"filtered"`
-	Parts          ResponsePiezas `json:"parts"`
+	ID             string         `json:"id,omitempty"`
+	Name           string         `json:"name,omitempty"`
+	HasNotes       bool           `json:"hasNotes,omitempty"`
+	LeafNode       bool           `json:"leafNode,omitempty"`
+	ImageID        string         `json:"imageId,omitempty"`
+	SerializedPath string         `json:"serializedPath,omitempty"`
+	Filtered       bool           `json:"filtered,omitempty"`
+	Parts          ResponsePiezas `json:"parts,omitempty"`
 }
 
 type Category struct {
-	ID             string        `json:"id"`
-	Name           string        `json:"name"`
-	HasNotes       bool          `json:"hasNotes"`
-	LeafNode       bool          `json:"leafNode"`
-	ImageID        string        `json:"imageId"`
-	SerializedPath string        `json:"serializedPath"`
-	Filtered       bool          `json:"filtered"`
-	SubCategory    []SubCategory `json:"subCategory"`
+	ID             string        `json:"id,omitempty"`
+	Name           string        `json:"name,omitempty"`
+	HasNotes       bool          `json:"hasNotes,omitempty"`
+	LeafNode       bool          `json:"leafNode,omitempty"`
+	ImageID        string        `json:"imageId,omitempty"`
+	SerializedPath string        `json:"serializedPath,omitempty"`
+	Filtered       bool          `json:"filtered,omitempty"`
+	SubCategory    []SubCategory `json:"subCategory,omitempty"`
 }
 
 type SuperSesion struct {
-	PartItem PartItems `json:"partItem"`
+	PartItem PartItems `json:"partItem,omitempty"`
 }
 
 type ResponsePiezas struct {
-	PageID            string           `json:"pageId"`
-	Illustrated       bool             `json:"illustrated"`
-	ImageID           string           `json:"imageId"`
-	PageCode          string           `json:"pageCode"`
-	PartItems         []PartItems      `json:"partItems"`
-	PageImages        []PageImages     `json:"pageImages"`
-	ColumnConfigs     []ColumnConfigs  `json:"columnConfigs"`
-	PageLimitExceeded bool             `json:"pageLimitExceeded"`
-	HasPageNotes      bool             `json:"hasPageNotes"`
-	SubParts          []ResponsePiezas `json:"subparts,omitempty"`
+	PageID            string           `json:"pageId,omitempty"`
+	Illustrated       bool             `json:"illustrated,omitempty"`
+	ImageID           string           `json:"imageId,omitempty"`
+	PageCode          string           `json:"pageCode,omitempty"`
+	PartItems         []PartItems      `json:"partItems,omitempty"`
+	PageImages        []PageImages     `json:"pageImages,omitempty"`
+	ColumnConfigs     []ColumnConfigs  `json:"columnConfigs,omitempty"`
+	PageLimitExceeded bool             `json:"pageLimitExceeded,omitempty"`
+	HasPageNotes      bool             `json:"hasPageNotes,omitempty"`
+	SubParts          []ResponsePiezas `json:"subparts,omitempty,omitempty"`
 }
 type PartItems struct {
-	PartID              string      `json:"partId"`
-	ParentPartID        string      `json:"parentPartId"`
-	SecondaryPartID     string      `json:"secondaryPartId"`
-	Manufacturer        string      `json:"manufacturer"`
-	PartNumber          string      `json:"partNumber"`
-	FormattedPartNumber string      `json:"formattedPartNumber"`
-	PartItemID          string      `json:"partItemId"`
-	ParentPartItemID    string      `json:"parentPartItemId"`
-	CalloutLabel        string      `json:"calloutLabel"`
-	PaddedCallout       string      `json:"paddedCallout"`
-	CrossCatKey         string      `json:"crossCatKey"`
-	Description         string      `json:"description"`
-	Quantity            string      `json:"quantity"`
-	PartType            string      `json:"partType"`
-	Indicators          []string    `json:"indicators"`
-	SuperSession        []PartItems `json:"superSession"`
-	AlphaSort           string      `json:"alphaSort"`
-	AlphaSortSequence   string      `json:"alphaSortSequence"`
-	Filtered            bool        `json:"filtered"`
-	AddedManually       bool        `json:"addedManually"`
-	Remarks             string      `json:"remarks,omitempty"`
+	PartID              string           `json:"partId,omitempty"`
+	ParentPartID        string           `json:"parentPartId,omitempty"`
+	SecondaryPartID     string           `json:"secondaryPartId,omitempty"`
+	Manufacturer        string           `json:"manufacturer,omitempty"`
+	PartNumber          string           `json:"partNumber,omitempty"`
+	FormattedPartNumber string           `json:"formattedPartNumber,omitempty"`
+	PartItemID          string           `json:"partItemId,omitempty"`
+	ParentPartItemID    string           `json:"parentPartItemId,omitempty"`
+	CalloutLabel        string           `json:"calloutLabel,omitempty"`
+	PaddedCallout       string           `json:"paddedCallout,omitempty"`
+	CrossCatKey         string           `json:"crossCatKey,omitempty"`
+	Description         string           `json:"description,omitempty"`
+	Quantity            string           `json:"quantity,omitempty"`
+	PartType            string           `json:"partType,omitempty"`
+	Indicators          []string         `json:"indicators,omitempty"`
+	SuperSession        []SuperPartItems `json:"superSession,omitempty"`
+	AlphaSort           string           `json:"alphaSort,omitempty"`
+	AlphaSortSequence   string           `json:"alphaSortSequence,omitempty"`
+	Filtered            bool             `json:"filtered,omitempty"`
+	AddedManually       bool             `json:"addedManually,omitempty"`
+	Remarks             string           `json:"remarks,omitempty,omitempty"`
 }
+
+type SuperPartItems struct {
+	PartItem struct {
+		PartID              string `json:"partId,omitempty"`
+		ParentPartID        string `json:"parentPartId,omitempty"`
+		SecondaryPartID     string `json:"secondaryPartId,omitempty"`
+		Manufacturer        string `json:"manufacturer,omitempty"`
+		PartNumber          string `json:"partNumber,omitempty"`
+		FormattedPartNumber string `json:"formattedPartNumber,omitempty"`
+		PartItemID          string `json:"partItemId,omitempty"`
+		ParentPartItemID    string `json:"parentPartItemId,omitempty"`
+		CalloutLabel        string `json:"calloutLabel,omitempty"`
+		PaddedCallout       string `json:"paddedCallout,omitempty"`
+		CrossCatKey         string `json:"crossCatKey,omitempty"`
+		Description         string `json:"description,omitempty"`
+		Quantity            string `json:"quantity,omitempty"`
+		PartType            string `json:"partType,omitempty"`
+		DynamicColumns      []struct {
+			Code  string `json:"code,omitempty"`
+			Value string `json:"value,omitempty"`
+			Name  string `json:"name,omitempty"`
+		} `json:"dynamicColumns,omitempty"`
+		AlphaSort         string `json:"alphaSort,omitempty"`
+		AlphaSortSequence string `json:"alphaSortSequence,omitempty"`
+		Filtered          bool   `json:"filtered,omitempty"`
+		AddedManually     bool   `json:"addedManually,omitempty"`
+	} `json:"partItem,omitempty"`
+	PriceBookSelected       bool  `json:"priceBookSelected,omitempty"`
+	SupersessionAvailable   bool  `json:"supersessionAvailable,omitempty"`
+	HistoryAvailable        bool  `json:"historyAvailable,omitempty"`
+	AttachmentAvailable     bool  `json:"attachmentAvailable,omitempty"`
+	AlternateAvailable      bool  `json:"alternateAvailable,omitempty"`
+	PartAttributesAvailable bool  `json:"partAttributesAvailable,omitempty"`
+	KitAvailable            bool  `json:"kitAvailable,omitempty"`
+	IdentifiesAvailable     bool  `json:"identifiesAvailable,omitempty"`
+	Images                  []any `json:"images,omitempty"`
+}
+
 type PageImages struct {
-	ImageID    string `json:"imageId"`
-	PageID     string `json:"pageId"`
-	ImageTitle string `json:"imageTitle"`
+	ImageID    string `json:"imageId,omitempty"`
+	PageID     string `json:"pageId,omitempty"`
+	ImageTitle string `json:"imageTitle,omitempty"`
 }
 type ColumnConfigs struct {
-	Key         string  `json:"key"`
-	Order       int     `json:"order"`
-	Width       int     `json:"width"`
-	PdfWidth    int     `json:"pdfWidth"`
-	MaxPdfWidth float64 `json:"maxPdfWidth"`
-	MinWidth    int     `json:"minWidth"`
-	MaxWidth    int     `json:"maxWidth"`
-	Resizable   bool    `json:"resizable"`
-	Title       string  `json:"title"`
-	Visible     bool    `json:"visible"`
-	Override    string  `json:"override"`
+	Key         string  `json:"key,omitempty"`
+	Order       int     `json:"order,omitempty"`
+	Width       int     `json:"width,omitempty"`
+	PdfWidth    int     `json:"pdfWidth,omitempty"`
+	MaxPdfWidth float64 `json:"maxPdfWidth,omitempty"`
+	MinWidth    int     `json:"minWidth,omitempty"`
+	MaxWidth    int     `json:"maxWidth,omitempty"`
+	Resizable   bool    `json:"resizable,omitempty"`
+	Title       string  `json:"title,omitempty"`
+	Visible     bool    `json:"visible,omitempty"`
+	Override    string  `json:"override,omitempty"`
 }

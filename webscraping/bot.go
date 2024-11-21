@@ -490,7 +490,7 @@ func (b *BotSubaru) subCategory(subCategory *Category) {
 	decoder.Decode(&responseFilter)
 
 	for _, pieza := range responseFilter.Children.ChildNodes {
-		pieza.Parts = b.getPieza(subCategory, pieza, pieza.ImageID)
+		pieza.Parts = b.getPieza(subCategory, pieza, pieza.ImageID, true)
 		b.downloadImagen(pieza.ImageID)
 		log.Println(b.VIN + "\\ - SubCategory : " + pieza.Name)
 		subCategory.SubCategory = append(subCategory.SubCategory, pieza)
@@ -500,7 +500,7 @@ func (b *BotSubaru) subCategory(subCategory *Category) {
 
 }
 
-func (b *BotSubaru) getPieza(padre *Category, pieza SubCategory, imageID string) ResponsePiezas {
+func (b *BotSubaru) getPieza(padre *Category, pieza SubCategory, imageID string, subItems bool) ResponsePiezas {
 	url := "https://snaponepc.com/epc-services/datasets/" + b.VinObject.DatasetID + "/pages/parts/" + pieza.SerializedPath + "/filterRequest/" + b.generateFilterRequest() + "?imageId=" + imageID
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -537,23 +537,32 @@ func (b *BotSubaru) getPieza(padre *Category, pieza SubCategory, imageID string)
 	decoder.Decode(&responsePieza)
 
 	//fmt.Println("MODELO;CATEGORIA;SUBCATEGORIA;PIEZA;ID PARTE;PARTE;DESCRIPCION")
-
-	for index, partItem := range responsePieza.PartItems {
-		for _, indicador := range partItem.Indicators {
-			if indicador == "supersession" {
-				superPartItem := b.getSuperSession(partItem.PartID, partItem.PartItemID)
-				responsePieza.PartItems[index].SuperSession = append(responsePieza.PartItems[1].SuperSession, superPartItem)
+	/*
+		for index, partItem := range responsePieza.PartItems {
+			for _, indicador := range partItem.Indicators {
+				if indicador == "supersession" {
+					superPartItem := b.getSuperSession(partItem.PartID, partItem.PartItemID)
+					responsePieza.PartItems[index].SuperSession = append(responsePieza.PartItems[1].SuperSession, superPartItem)
+				}
 			}
+
 		}
-
-	}
-
+	*/
+	// TODO:
 	for _, pageImage := range responsePieza.PageImages {
 
 		b.downloadImagen(pageImage.ImageID)
+
+		//responsePiezasFromImagen := b.getPieza(padre, pieza, pageImage.ImageID)
+
+		//responsePieza.PartItems = append(responsePieza.PartItems, responsePiezasFromImagen.PartItems...)
+
 		//Ojo
-		//subPart := b.getPieza(padre, pieza, pageImage.ImageID)
-		//responsePieza.SubParts = append(responsePieza.SubParts, subPart)
+		if subItems {
+			subPart := b.getPieza(padre, pieza, pageImage.ImageID, false)
+			responsePieza.SubParts = append(responsePieza.SubParts, subPart)
+		}
+
 	}
 
 	return responsePieza
@@ -572,7 +581,7 @@ func (b *BotSubaru) generateFilterRequest() string {
 	return b64.StdEncoding.EncodeToString([]byte(filterRequest))
 }
 
-func (b *BotSubaru) getSuperSession(partId, partItemId string) PartItems {
+func (b *BotSubaru) getSuperSession(partId, partItemId string) SuperPartItems {
 
 	req, err := http.NewRequest("GET", "https://snaponepc.com/epc-services/partdetails/?ds="+b.VinObject.DatasetID+"&pr="+partId+"&api=undefined&fr="+b.generateFilterRequest()+"&pi="+partItemId, nil)
 	if err != nil {
@@ -598,10 +607,10 @@ func (b *BotSubaru) getSuperSession(partId, partItemId string) PartItems {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
-	supersesionPartItems := SuperSesion{}
+	supersesionPartItems := SuperPartItems{}
 	jsonContent := string(body)
 	decoder := json.NewDecoder(strings.NewReader(jsonContent))
 	decoder.Decode(&supersesionPartItems)
 
-	return supersesionPartItems.PartItem
+	return supersesionPartItems
 }
