@@ -560,7 +560,9 @@ func (b *BotSubaru) getPieza(padre *Category, pieza SubCategory, imageID string,
 		//Ojo
 		if subItems {
 			subPart := b.getPieza(padre, pieza, pageImage.ImageID, false)
-			responsePieza.SubParts = append(responsePieza.SubParts, subPart)
+
+			responsePieza.PartItems = append(responsePieza.PartItems, subPart.PartItems...)
+			//responsePieza.SubParts = append(responsePieza.SubParts, subPart)
 		}
 
 	}
