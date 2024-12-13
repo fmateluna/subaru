@@ -346,7 +346,7 @@ func (b *BotSubaru) downloadImagen(imageId string) {
 	if err != nil {
 		// handle err
 	}
-	file, err := os.Create(b.VIN + "\\" + imageId + ".png")
+	file, err := os.Create(b.VIN + os.PathSeparator + imageId + ".png")
 
 	defer file.Close()
 
