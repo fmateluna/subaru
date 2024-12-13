@@ -73,7 +73,7 @@ func (b *BotSubaru) Init(vin string) {
 	b.Cookies = make(map[string]http.Cookie)
 	b.Pass64 = b64.StdEncoding.EncodeToString([]byte(b.Pass))
 	if b.login() {
-		log.Println("Easy like sunday morning!")
+		//log.Println("Easy like sunday morning!")
 		b.makeAccountGreatAgain()
 		if err := os.Mkdir(vin, os.ModePerm); err != nil {
 			fmt.Println(err.Error())
@@ -93,7 +93,7 @@ func (b *BotSubaru) Init(vin string) {
 		b.createJSON()
 
 	} else {
-		log.Println("WTF??")
+		//log.Println("WTF??")
 	}
 }
 
@@ -133,7 +133,7 @@ func (b *BotSubaru) GenerateSbsepc5cs() string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, nuevoSBSEPC5S)
 	signedString, _ := token.SignedString([]byte(b.SessionJwtToken.Sig))
 
-	log.Println(signedString)
+	//log.Println(signedString)
 
 	return signedString
 
@@ -152,7 +152,7 @@ func (b *BotSubaru) GenerateSbsepc5s() string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, nuevoSBSEPC5S)
 	signedString, _ := token.SignedString([]byte(KEY_SBSEPC5S))
 
-	log.Println(signedString)
+	//log.Println(signedString)
 
 	return signedString
 }
@@ -193,7 +193,7 @@ func (b *BotSubaru) makeAccountGreatAgain() {
 	body, _ := ioutil.ReadAll(resp.Body)
 	account := Account{}
 	accountResponse := string(body)
-	log.Println(accountResponse)
+	//log.Println(accountResponse)
 	decoder := json.NewDecoder(strings.NewReader(accountResponse))
 	decoder.Decode(&account)
 	b.AccountBot = account
@@ -213,7 +213,7 @@ func (b *BotSubaru) CreateSBSEPC5ACS() string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, nuevoSBSEPC5S)
 	signedString, _ := token.SignedString([]byte(KEY_SBSEPC5ACS))
 
-	log.Println(signedString)
+	//log.Println(signedString)
 
 	return signedString
 }
@@ -256,7 +256,7 @@ func (b *BotSubaru) login() bool {
 	if err != nil {
 		return false
 	} else {
-		log.Println("PONG!! ", resp.StatusCode)
+		//log.Println("PONG!! ", resp.StatusCode)
 		if resp.StatusCode == 401 || resp.StatusCode == http.StatusForbidden {
 			return false
 		} else {
@@ -291,16 +291,16 @@ func (b *BotSubaru) login() bool {
 func (b *BotSubaru) takeCookies(resp *http.Response) {
 
 	if resp.Request != nil {
-		log.Println("Seteando REQUEST Cookies()  ", len(resp.Request.Cookies()))
+		//log.Println("Seteando REQUEST Cookies()  ", len(resp.Request.Cookies()))
 		for _, cookie := range resp.Request.Cookies() {
-			log.Println("[+] Cookies ", cookie.Name, " =", cookie.Value)
+			//log.Println("[+] Cookies ", cookie.Name, " =", cookie.Value)
 			b.Cookies[cookie.Name] = *cookie
 		}
 	}
 
-	log.Println("LEYENDO Response Cookies() ", len(resp.Cookies()))
+	//log.Println("LEYENDO Response Cookies() ", len(resp.Cookies()))
 	for _, cookie := range resp.Cookies() {
-		log.Println("[!] Cookies ", cookie.Name, " =", cookie.Value)
+		//log.Println("[!] Cookies ", cookie.Name, " =", cookie.Value)
 
 		if cookie.Name == "AWSALB" {
 			b.cookieAWSALB = cookie.Value
